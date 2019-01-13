@@ -3,12 +3,11 @@
 import pandas as pd
 import numpy as np
 import random as rd
+import os
 pd.options.display.max_columns = 400
-print('The pandas version is {}.'.format(pd.__version__))
 import hashlib
 from rdgeneration import Rdgen
 pd.options.mode.chained_assignment = None 
-
 
 
 class f_create:
@@ -20,7 +19,7 @@ class f_create:
         self.generate_value()
 
     def getinfo(self):
-        self.df = pd.read_excel('../table/2014/BDN_interpA-A1-S1_2014.xlsx')
+        self.df = pd.read_excel(self.__file)
         self.num_col = pd.to_numeric(self.df["Unnamed: 0"].loc[11:])
         self.max_num = self.num_col.max()
         self.ind_max = self.num_col[self.num_col == self.max_num].index[0]
@@ -118,10 +117,15 @@ class f_create:
             axis =1
             )
 
+
         self.__new_df["nom_UV"] = nom
         self.__new_df["code_UV"] = code
         self.__new_df["note"] = note
-        self.__new_df.drop(self.Uv_name, axis = 1)
+        self.__new_df["lieu"] = "Nantes"
+        self.__new_df.drop(self.Uv_name, axis = 1,inplace = True)
+
+        annee = self.__new_df['annee'].iloc[0][-4:]
+        self.__new_df["N° Etudiant"] = self.__new_df["N° Etudiant"].apply(lambda var : str(annee)+"_"+var)
 
 
 
@@ -139,11 +143,17 @@ class f_create:
         self.preproces()
         self.modify()
     
+    def save_file(self,name):
+        self.get_file().to_csv(name+"_"+str(rd.randint(0,100000000))+".csv",encoding = 'utf-8-sig')
+    
     def get_file(self):
         return self.__new_df
     
+    def get_numrgen(self):
+        return self.number_std
+    
 
 if __name__ == "__main__":
-    fff = f_create('../table/2015/BDN_interpA-A1-S2-2015.xlsx',Rdgen(195))
+    fff = f_create('../table/2014/BDN_STA-A1-S1_2014.xlsx',Rdgen(195))
     fff.create_file()
     fff.get_file().to_csv("example.csv",encoding = 'utf-8-sig')
