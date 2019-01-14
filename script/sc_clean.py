@@ -280,33 +280,50 @@ for std in unique_std:
     exp = df.iloc[list_ind]
     fd_comp = pd.concat([fd_comp,exp])
 
+
+
+fd_comp = fd_comp.loc[:,["std ID","cs ID","cg ID","semestre","Moyenne","Grade","Grade ECTS","lieu","time_id"]]
+
 count+=1
 printProgressBar(count,tot,prefix=" Status progression")
 
 #Modifying the column's names
 
-fd_comp = fd_comp.loc[:,["std ID","cs ID","cg ID","semestre","Moyenne","Grade","Grade ECTS","lieu","time_id"]]
 df_student.columns = ['std_ID', 'N° Etudiant', 'Nom', 'Prénom', 'time_id']
+df_student.reset_index(inplace = True)
+df_student.drop("index",inplace = True,axis=1)
+
 ft_UV.columns =['uv_ID', 'lieu', 'std_ID', 'note_uv','time_id']
+ft_UV.reset_index(inplace = True)
+ft_UV.drop("index",inplace = True,axis=1)
+
 df_UV.columns = ['uv_ID', 'nom_UV', 'code_UV']
+df_UV.reset_index(inplace = True)
+df_UV.drop("index",inplace = True,axis=1)
+
 df_cs.columns = ['cs_ID', 'respo_CS', 'nom_CS', 'code_CS']
+df_cs.reset_index(inplace = True)
+df_cs.drop("index",inplace = True,axis=1)
+
 df_cg.columns = ['cg_id', 'code_CG', 'nom_CG']
+df_cg.reset_index(inplace = True)
+df_cg.drop("index",inplace = True,axis=1)
+
 fd_comp.columns = ['std_ID', 'cs_ID', 'cg_ID', 'semestre', 'moyenne', 'grade', 'grade_ECTS', 'lieu',"time_id"]
+fd_comp.reset_index(inplace = True)
+fd_comp.drop("index",inplace = True,axis=1)
 
 count+=1
 printProgressBar(count,tot,prefix=" Status progression")
 
 #Creating tables
 print("CREATING FILES")
-tot=7
+tot=6
 count = 0
 printProgressBar(count,tot,prefix=" Status progression")
 
-fd_comp.to_csv("../results/table/table_de_fait_competence.csv",encoding = 'utf-8-sig')
-count+=1
-printProgressBar(count,tot,prefix=" Status progression")
 
-df_student.to_csv("../results/table/table_dim_etudiant.csv",encoding = 'utf-8-sig')
+df_student.to_csv("../results/table/table_dim_etudiant.csv",encoding = 'utf-8-sig', index = False)
 count+=1
 printProgressBar(count,tot,prefix=" Status progression")
 
@@ -314,19 +331,19 @@ ft_UV.to_csv("../results/table/table_de_fait_UV.csv",encoding = 'utf-8-sig')
 count+=1
 printProgressBar(count,tot,prefix=" Status progression")
 
-df_UV.to_csv("../results/table/table_dim_UV.csv",encoding = 'utf-8-sig')
+df_UV.to_csv("../results/table/table_dim_UV.csv",encoding = 'utf-8-sig', index = False)
 count+=1
 printProgressBar(count,tot,prefix=" Status progression")
 
-df_cs.to_csv("../results/table/table_dim_CS.csv",encoding = 'utf-8-sig')
+df_cs.to_csv("../results/table/table_dim_CS.csv",encoding = 'utf-8-sig', index = False)
 count+=1
 printProgressBar(count,tot,prefix=" Status progression")
 
-df_cg.to_csv("../results/table/table_dim_CG.csv",encoding = 'utf-8-sig')
+df_cg.to_csv("../results/table/table_dim_CG.csv",encoding = 'utf-8-sig', index = False)
 count+=1
 printProgressBar(count,tot,prefix=" Status progression")
 
-fd_comp.to_csv("../results/table/table_dim_competence.csv",encoding = 'utf-8-sig')
+fd_comp.to_csv("../results/table/table_de_fait_competence.csv",encoding = 'utf-8-sig')
 count+=1
 printProgressBar(count,tot,prefix=" Status progression")
 
