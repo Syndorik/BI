@@ -350,7 +350,7 @@ maj(reset = True, tot = tot)
 df_student.to_csv("../results/table/table_dim_etudiant.csv",encoding = 'utf-8-sig', index = False)
 maj(tot = tot)
 
-ft_UV.to_csv("../results/table/table_de_fait_UV.csv",encoding = 'utf-8-sig')
+ft_UV.to_csv("../results/table/table_dee_fait_UV.csv",encoding = 'utf-8-sig')
 maj(tot = tot)
 
 df_UV.to_csv("../results/table/table_dim_UV.csv",encoding = 'utf-8-sig', index = False)
