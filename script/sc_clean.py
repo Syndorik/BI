@@ -365,13 +365,13 @@ maj(tot = tot)
 fd_comp.to_csv("../results/table/table_de_fait_competence.csv",encoding = 'utf-8-sig')
 maj(tot = tot)
 
-uv_grade.to_csv("../results/table/table_dim_grade_UV.csv",encoding = 'utf-8-sig')
+uv_grade.to_csv("../results/table/table_dim_grade_UV.csv",encoding = 'utf-8-sig', index = False)
 maj(tot = tot)
 
-cpt_grade.to_csv("../results/table/table_dim_grade_cpt.csv",encoding = 'utf-8-sig')
+cpt_grade.to_csv("../results/table/table_dim_grade_cpt.csv",encoding = 'utf-8-sig', index = False)
 maj(tot = tot)
 
-lieu_d.to_csv("../results/table/table_dim_lieu.csv",encoding = 'utf-8-sig')
+lieu_d.to_csv("../results/table/table_dim_lieu.csv",encoding = 'utf-8-sig', index = False)
 maj(tot = tot)
 
 print("TABLES SAVED")
