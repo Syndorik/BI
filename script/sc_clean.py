@@ -374,6 +374,8 @@ maj(tot = tot)
 lieu_d.to_csv("../results/table/table_dim_lieu.csv",encoding = 'utf-8-sig', index = False)
 maj(tot = tot)
 
+df_tps.to_csv("../results/table/table_dim_temps.csv",encoding = 'utf-8-sig', index = False)
+
 print("TABLES SAVED")
 
 
