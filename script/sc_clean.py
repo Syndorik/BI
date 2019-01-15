@@ -6,6 +6,7 @@ sys.path.insert(0,"../lib")
 
 import argparse
 import pandas as pd
+import numpy as np
 
 from file_creation import f_create
 from rdgeneration import Rdgen
@@ -32,6 +33,17 @@ def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, 
     if iteration == total: 
         print()
 
+count = 0
+tot = 0
+def maj(reset = False, tot = tot):
+        global count
+        if reset == True:
+                count =0
+                printProgressBar(count,tot,prefix=" Status progression")
+                count+=1
+        else:
+                printProgressBar(count,tot,prefix=" Status progression")
+                count+=1
 
 
 ### Getting argument
@@ -73,6 +85,7 @@ for k in dir:
     tot+= len(dir[k])
 count = 0
 
+maj(reset = True, tot = tot)
 
 dir_file = []
 for annee in dir :
@@ -81,8 +94,7 @@ for annee in dir :
         temp = f_create(file,number)
         temp.create_file()
         dir_file.append(temp)
-        count+=1
-        printProgressBar(count,tot,prefix=" Status progression")
+        maj(tot = tot)
         #temp.save_file("../results/"+annee)
 
 mycsv = pd.concat([k.get_file() for k in dir_file]).reset_index().drop(["index"],axis =1)
@@ -91,9 +103,9 @@ mycsv.to_csv("../results/final_res.csv",encoding = 'utf-8-sig')
 print("CREATING TABLES")
 
 df = pd.read_csv("../results/final_res.csv")
-tot=9
-count = 0
-printProgressBar(count,tot,prefix=" Status progression")
+
+tot = 12
+maj(reset=True, tot = tot)
 
 #Preparation
 def get_ind(var,strr,dic,unique,printed):
@@ -109,8 +121,7 @@ df["unicite"] = df.loc[:,["time_year","semestre"]].apply(lambda var : var["time_
 
 df.drop("Unnamed: 0", inplace=True, axis=1)
 df.reset_index(inplace= True)
-count+=1
-printProgressBar(count,tot,prefix=" Status progression")
+maj(tot = tot)
 
 #Dim Temps
 df_tps = df.loc[:,["index","time_year","semestre"]]
@@ -136,8 +147,7 @@ df["time_id"] = df["unicite"].apply(lambda var : dic_tpsdid[var])
 
 df_tps.drop("unicite",inplace= True,axis=1)
 
-count+=1
-printProgressBar(count,tot,prefix=" Status progression")
+maj(tot = tot)
 
 #Dim Etudiant
 
@@ -161,8 +171,7 @@ df_student.loc[:,["std ID","N° Etudiant"]].apply(lambda var: get_ind(var,"std I
 
 df["std ID"] = df["N° Etudiant"].apply(lambda var : dic_stdid[var])
 
-count+=1
-printProgressBar(count,tot,prefix=" Status progression")
+maj(tot = tot)
 
 #Dim UV
 
@@ -189,8 +198,7 @@ df_UV.loc[:,["uv ID","nom_UV"]].apply(lambda var: get_ind(var,"uv ID",dic_uvdid,
 df_UV.head()
 df["UV ID"] = df["nom_UV"].apply(lambda var : dic_uvdid[var])
 
-count+=1
-printProgressBar(count,tot,prefix=" Status progression")
+maj(tot = tot)
 
 #Dim CS
 
@@ -218,9 +226,7 @@ df["cs ID"] = df["idcss"].apply(lambda var : dic_csdid[var])
 
 df_cs.drop("idcss",inplace= True,axis=1)
 
-count+=1
-printProgressBar(count,tot,prefix=" Status progression")
-
+maj(tot = tot)
 #Dim CG
 
 rel_CG_nom = {"IG": "Compétences en ingénierie",
@@ -252,15 +258,36 @@ df_cg.loc[:,["cg id","code cg"]].apply(lambda var: get_ind(var,"cg id",dic_cgdid
 df_cg.head()
 df["cg ID"] = df["codeCS"].apply(lambda var : dic_cgdid[var[:-1]])
 
-count+=1
-printProgressBar(count,tot,prefix=" Status progression")
+maj(tot = tot)
+
+# Degenerated Dim UvGrade
+temp = {'id' : [0,1,2,3,4,5], 'symbol' : ['+','=','-','','ABS','DIS']}
+uv_grade = pd.DataFrame(temp)
+dic_temp = {'+':0,'=':1,'-':2, np.nan:3,'ABS':4,'DIS':5}
+df['uv_grade_ID'] = df.apply(lambda var : dic_temp[var['note']], axis =1)
+maj(tot = tot)
+
+# Dim Grade ECTS
+temp = {'id' : [0,1,2,3,4,5,6,7], 
+        'grade_ECTS' : ['A','B','C','D','E','F','FX',''], 
+        'grade_atteint' : ['au dessus','atteint','atteint','atteint','atteint','en dessous','en dessous','']}
+cpt_grade = pd.DataFrame(temp)
+dic_temp = {'A':0,'B':1,'C':2,'D':3,'E':4,'F':5,'FX':6,np.nan:7}
+df['cpt_grade_ID'] = df.apply(lambda var: dic_temp[var['Grade ECTS']],axis =1)
+maj(tot = tot)
+
+# Dim Degenerated Lieu
+temp = {'id' : [0], 'lieu': ['Nantes']}
+lieu_d = pd.DataFrame(temp)
+dic_temp = {'Nantes': 0}
+df['lieu_ID'] = df.apply(lambda var : dic_temp[var['lieu']],axis =1)
+maj(tot = tot)
 
 #Fact Table UV
 
-ft_UV = df.loc[:,["UV ID","lieu","std ID","note","time_id"]]
+ft_UV = df.loc[:,["UV ID",'uv_grade_ID',"lieu_ID","std ID","time_id"]]
 
-count+=1
-printProgressBar(count,tot,prefix=" Status progression")
+maj(tot = tot)
 
 #Fact Table Comp
 
@@ -282,10 +309,9 @@ for std in unique_std:
 
 
 
-fd_comp = fd_comp.loc[:,["std ID","cs ID","cg ID","semestre","Moyenne","Grade","Grade ECTS","lieu","time_id"]]
+fd_comp = fd_comp.loc[:,["std ID",'cpt_grade_ID',"cs ID","cg ID","lieu_ID","time_id","Moyenne"]]
 
-count+=1
-printProgressBar(count,tot,prefix=" Status progression")
+maj(tot = tot)
 
 #Modifying the column's names
 
@@ -293,7 +319,7 @@ df_student.columns = ['std_ID', 'N° Etudiant', 'Nom', 'Prénom', 'time_id']
 df_student.reset_index(inplace = True)
 df_student.drop("index",inplace = True,axis=1)
 
-ft_UV.columns =['uv_ID', 'lieu', 'std_ID', 'note_uv','time_id']
+ft_UV.columns =['uv_ID', 'uv_grade_ID' ,'lieu_ID', 'std_ID','time_id']
 ft_UV.reset_index(inplace = True)
 ft_UV.drop("index",inplace = True,axis=1)
 
@@ -309,43 +335,44 @@ df_cg.columns = ['cg_id', 'code_CG', 'nom_CG']
 df_cg.reset_index(inplace = True)
 df_cg.drop("index",inplace = True,axis=1)
 
-fd_comp.columns = ['std_ID', 'cs_ID', 'cg_ID', 'semestre', 'moyenne', 'grade', 'grade_ECTS', 'lieu',"time_id"]
+fd_comp.columns = ['std_ID','cpt_grade_ID','cs_ID', 'cg_ID','lieu_ID',"time_id" ,'moyenne']
 fd_comp.reset_index(inplace = True)
 fd_comp.drop("index",inplace = True,axis=1)
 
-count+=1
-printProgressBar(count,tot,prefix=" Status progression")
+maj(tot = tot)
 
 #Creating tables
 print("CREATING FILES")
-tot=6
-count = 0
-printProgressBar(count,tot,prefix=" Status progression")
+tot = 9
+maj(reset = True, tot = tot)
 
 
 df_student.to_csv("../results/table/table_dim_etudiant.csv",encoding = 'utf-8-sig', index = False)
-count+=1
-printProgressBar(count,tot,prefix=" Status progression")
+maj(tot = tot)
 
 ft_UV.to_csv("../results/table/table_de_fait_UV.csv",encoding = 'utf-8-sig')
-count+=1
-printProgressBar(count,tot,prefix=" Status progression")
+maj(tot = tot)
 
 df_UV.to_csv("../results/table/table_dim_UV.csv",encoding = 'utf-8-sig', index = False)
-count+=1
-printProgressBar(count,tot,prefix=" Status progression")
+maj(tot = tot)
 
 df_cs.to_csv("../results/table/table_dim_CS.csv",encoding = 'utf-8-sig', index = False)
-count+=1
-printProgressBar(count,tot,prefix=" Status progression")
+maj(tot = tot)
 
 df_cg.to_csv("../results/table/table_dim_CG.csv",encoding = 'utf-8-sig', index = False)
-count+=1
-printProgressBar(count,tot,prefix=" Status progression")
+maj(tot = tot)
 
 fd_comp.to_csv("../results/table/table_de_fait_competence.csv",encoding = 'utf-8-sig')
-count+=1
-printProgressBar(count,tot,prefix=" Status progression")
+maj(tot = tot)
+
+uv_grade.to_csv("../results/table/table_dim_grade_UV.csv",encoding = 'utf-8-sig')
+maj(tot = tot)
+
+cpt_grade.to_csv("../results/table/table_dim_grade_cpt.csv",encoding = 'utf-8-sig')
+maj(tot = tot)
+
+lieu_d.to_csv("../results/table/table_dim_lieu.csv",encoding = 'utf-8-sig')
+maj(tot = tot)
 
 print("TABLES SAVED")
 
