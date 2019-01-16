@@ -173,10 +173,15 @@ df["std ID"] = df["N° Etudiant"].apply(lambda var : dic_stdid[var])
 
 maj(tot = tot)
 
+#Creation des niveaux A refaire
+df['lvl_uv'] = "niveau 1"
+df['lvl_cs'] = "niveau 1"
+df['lvl_cg'] = "niveau 1"
+
+
 #Dim UV
 
-df_UV = df.loc[:,["index","nom_UV","code_UV"]]
-
+df_UV = df.loc[:,["index","nom_UV","code_UV",'lvl_uv']]
 unique_uv = df_UV["nom_UV"].unique()
 dic_uv = {}
 
@@ -202,7 +207,7 @@ maj(tot = tot)
 
 #Dim CS
 
-df_cs = df.loc[:,["index","idcss","responsable_UE","libelle_UE","codeCS"]]
+df_cs = df.loc[:,["index","idcss","responsable_UE","libelle_UE","codeCS",'lvl_cs']]
 
 unique_cs = df_cs["idcss"].unique()
 dic_cs = {}
@@ -216,7 +221,7 @@ df_cs.reset_index(inplace=True)
 df_cs.drop("index",axis=1,inplace=True)
 df_cs.reset_index(inplace=True)
 
-col = ['cs ID', 'idcss', 'respoCS', 'nom_CS', 'codeCS']
+col = ['cs ID', 'idcss', 'respoCS', 'nom_CS', 'codeCS','lvl_cs']
 df_cs.columns = col
 
 dic_csdid = {}
@@ -228,12 +233,11 @@ df_cs.drop("idcss",inplace= True,axis=1)
 
 maj(tot = tot)
 #Dim CG
-
 rel_CG_nom = {"IG": "Compétences en ingénierie",
              "interp": "Compétences interpersonnelles",
              "intra" : "Compétences intra-personnelles",
              "ST" : "Compétences scientifiques et techniques"}
-df_cg = df.loc[:,["index","codeCS"]]
+df_cg = df.loc[:,["index","codeCS",'lvl_cg']]
 
 df_cg["codeCS"] = df_cg["codeCS"].apply(lambda var: var[0:-1])
 df_cg["cg_nom"] = df_cg["codeCS"].apply(lambda var: rel_CG_nom[var])
@@ -250,7 +254,7 @@ df_cg.reset_index(inplace=True)
 df_cg.drop("index",axis=1,inplace=True)
 df_cg.reset_index(inplace=True)
 
-col = ["cg id","code cg","cg_nom"]
+col = ["cg id","code cg","cg_nom",'lvl_cg']
 df_cg.columns = col
 
 dic_cgdid = {}
@@ -285,7 +289,7 @@ maj(tot = tot)
 
 #Fact Table UV
 
-ft_UV = df.loc[:,["UV ID",'uv_grade_ID',"lieu_ID","std ID","time_id"]]
+ft_UV = df.loc[:,["UV ID",'uv_grade_ID',"lieu_ID","std ID","time_id","cs ID"]]
 
 maj(tot = tot)
 
@@ -319,19 +323,19 @@ df_student.columns = ['std_ID', 'N° Etudiant', 'Nom', 'Prénom', 'time_id']
 df_student.reset_index(inplace = True)
 df_student.drop("index",inplace = True,axis=1)
 
-ft_UV.columns =['uv_ID', 'uv_grade_ID' ,'lieu_ID', 'std_ID','time_id']
+ft_UV.columns =['uv_ID', 'uv_grade_ID' ,'lieu_ID', 'std_ID','time_id','cs_id']
 ft_UV.reset_index(inplace = True)
 ft_UV.drop("index",inplace = True,axis=1)
 
-df_UV.columns = ['uv_ID', 'nom_UV', 'code_UV']
+df_UV.columns = ['uv_ID', 'nom_UV', 'code_UV', 'lvl_uv']
 df_UV.reset_index(inplace = True)
 df_UV.drop("index",inplace = True,axis=1)
 
-df_cs.columns = ['cs_ID', 'respo_CS', 'nom_CS', 'code_CS']
+df_cs.columns = ['cs_ID', 'respo_CS', 'nom_CS', 'code_CS', 'lvl_cs']
 df_cs.reset_index(inplace = True)
 df_cs.drop("index",inplace = True,axis=1)
 
-df_cg.columns = ['cg_id', 'code_CG', 'nom_CG']
+df_cg.columns = ['cg_id', 'code_CG', 'nom_CG', 'lvl_cg']
 df_cg.reset_index(inplace = True)
 df_cg.drop("index",inplace = True,axis=1)
 
