@@ -123,6 +123,41 @@ df.drop("Unnamed: 0", inplace=True, axis=1)
 df.reset_index(inplace= True)
 maj(tot = tot)
 
+#Definition des jetons
+
+jacq_dic = {"2015" : { "S1" : 
+                      {"STA" : 12,
+                       "STB" : 12,
+                       "STC" : 4}, 
+                      "S2" : 
+                      {"STA" : 16,
+                       "STB" : 4,
+                       "STC" : 12, 
+                       "IGA" : 4,
+                       "IGB" : 4}
+                     },
+            "2016" : { "S1" : 
+                      {"STA" : 12,
+                       "STB" : 12,
+                       "STC" : 4}, 
+                      "S2" : 
+                      {"STA" : 12,
+                       "STB" : 4,
+                       "STC" : 12}
+                     },
+            "2017" : { "S1" : 
+                      {"STA" : 8,
+                       "STB" : 8,
+                       "STC" : 4}, 
+                      "S2" : 
+                      {"STA" : 8,
+                       "STB" : 8,
+                       "STC" : 4}
+                     }
+            
+           }
+
+
 #Dim Temps
 df_tps = df.loc[:,["index","time_year","semestre"]]
 df_tps["unicite"] = df.loc[:,["time_year","semestre"]].apply(lambda var : var["time_year"]+"-"+var["semestre"],axis = 1)
@@ -173,15 +208,11 @@ df["std ID"] = df["N° Etudiant"].apply(lambda var : dic_stdid[var])
 
 maj(tot = tot)
 
-#Creation des niveaux A refaire
-df['lvl_uv'] = "niveau 1"
-df['lvl_cs'] = "niveau 1"
-df['lvl_cg'] = "niveau 1"
-
 
 #Dim UV
 
-df_UV = df.loc[:,["index","nom_UV","code_UV",'lvl_uv']]
+df_UV = df.loc[:,["index","nom_UV","code_UV","time_year","semestre"]]
+
 unique_uv = df_UV["nom_UV"].unique()
 dic_uv = {}
 
@@ -207,7 +238,7 @@ maj(tot = tot)
 
 #Dim CS
 
-df_cs = df.loc[:,["index","idcss","responsable_UE","libelle_UE","codeCS",'lvl_cs']]
+df_cs = df.loc[:,["index","idcss","responsable_UE","libelle_UE","codeCS","semestre","time_year"]]
 
 unique_cs = df_cs["idcss"].unique()
 dic_cs = {}
@@ -221,7 +252,7 @@ df_cs.reset_index(inplace=True)
 df_cs.drop("index",axis=1,inplace=True)
 df_cs.reset_index(inplace=True)
 
-col = ['cs ID', 'idcss', 'respoCS', 'nom_CS', 'codeCS','lvl_cs']
+col = ['cs ID', 'idcss', 'respoCS', 'nom_CS', 'codeCS','semestre','annee']
 df_cs.columns = col
 
 dic_csdid = {}
@@ -231,13 +262,17 @@ df["cs ID"] = df["idcss"].apply(lambda var : dic_csdid[var])
 
 df_cs.drop("idcss",inplace= True,axis=1)
 
+mandatory = ['STA','STB','STC','IGA','IGB']
+
+df_cs["jacq"] = df_cs.apply(lambda line : jacq_dic[line["annee"]][line["semestre"]][line["codeCS"]] if line["codeCS"] in mandatory else 4 ,axis = 1)
+
 maj(tot = tot)
 #Dim CG
 rel_CG_nom = {"IG": "Compétences en ingénierie",
              "interp": "Compétences interpersonnelles",
              "intra" : "Compétences intra-personnelles",
              "ST" : "Compétences scientifiques et techniques"}
-df_cg = df.loc[:,["index","codeCS",'lvl_cg']]
+df_cg = df.loc[:,["index","codeCS"]]
 
 df_cg["codeCS"] = df_cg["codeCS"].apply(lambda var: var[0:-1])
 df_cg["cg_nom"] = df_cg["codeCS"].apply(lambda var: rel_CG_nom[var])
@@ -254,7 +289,7 @@ df_cg.reset_index(inplace=True)
 df_cg.drop("index",axis=1,inplace=True)
 df_cg.reset_index(inplace=True)
 
-col = ["cg id","code cg","cg_nom",'lvl_cg']
+col = ["cg id","code cg","cg_nom"]
 df_cg.columns = col
 
 dic_cgdid = {}
@@ -262,22 +297,7 @@ df_cg.loc[:,["cg id","code cg"]].apply(lambda var: get_ind(var,"cg id",dic_cgdid
 df_cg.head()
 df["cg ID"] = df["codeCS"].apply(lambda var : dic_cgdid[var[:-1]])
 
-maj(tot = tot)
 
-# Degenerated Dim UvGrade
-temp = {'id' : [0,1,2,3,4,5], 'symbol' : ['+','=','-','','ABS','DIS']}
-uv_grade = pd.DataFrame(temp)
-dic_temp = {'+':0,'=':1,'-':2, np.nan:3,'ABS':4,'DIS':5}
-df['uv_grade_ID'] = df.apply(lambda var : dic_temp[var['note']], axis =1)
-maj(tot = tot)
-
-# Dim Grade ECTS
-temp = {'id' : [0,1,2,3,4,5,6,7], 
-        'grade_ECTS' : ['A','B','C','D','E','F','FX',''], 
-        'grade_atteint' : ['au dessus','atteint','atteint','atteint','atteint','en dessous','en dessous','']}
-cpt_grade = pd.DataFrame(temp)
-dic_temp = {'A':0,'B':1,'C':2,'D':3,'E':4,'F':5,'FX':6,np.nan:7}
-df['cpt_grade_ID'] = df.apply(lambda var: dic_temp[var['Grade ECTS']],axis =1)
 maj(tot = tot)
 
 # Dim Degenerated Lieu
@@ -287,61 +307,52 @@ dic_temp = {'Nantes': 0}
 df['lieu_ID'] = df.apply(lambda var : dic_temp[var['lieu']],axis =1)
 maj(tot = tot)
 
-#Fact Table UV
+#Fact Table TDFNotes
+def jnote(line):
+    if line["note"] == "+":
+        return int(df_cs[df_cs["cs ID"] == line["cs ID"]]['jacq']+1)
+    elif line["note"] == "=":
+        return int(df_cs[df_cs["cs ID"] == line["cs ID"]]['jacq'])
+    else: 
+        return 0
 
-ft_UV = df.loc[:,["UV ID",'uv_grade_ID',"lieu_ID","std ID","time_id","cs ID"]]
+ft_notes = df.loc[:,["cs ID","UV ID","time_id","std ID","lieu_ID","note"]]
+ft_notes["jetons_acquis"] = ft_notes.apply(lambda line: jnote(line), axis = 1)
+ft_notes.drop("note",inplace = True, axis = 1)
+
+maj(tot = tot)
+
+# Fact Table TDF_csuv
+ft_csuv = df.loc[:,["cs ID","UV ID"]]
+
+def niv_cs(line):
+    tmp = df_cs[df_cs["cs ID"] == line["cs ID"]]
+
+    if tmp["semestre"][tmp.index[0]] == "S1":
+        return 1
+    elif tmp["semestre"][tmp.index[0]] == "S2" :
+        return 2
+
+ft_csuv["niveau_CS"] = ft_csuv.apply(lambda line : niv_cs(line),axis = 1)
+ft_csuv["nb_jetons"] = 4
+
+
+maj(tot = tot)
+
+
+
+#Fact Table TDF_cscg
+
+ft_cscg = df.loc[:,["cs ID","cg ID"]]
+ft_cscg = ft_cscg.drop_duplicates()
 
 maj(tot = tot)
 
 #Fact Table Comp
 
-fd_comp = pd.DataFrame()
-
-unique_std = df["N° Etudiant"].unique()
-
-for std in unique_std:    
-    exp = df[df["N° Etudiant"] == std ]
-    exp.head()
-
-    unique_cp = exp["cs ID"].unique()
-    dic_cp = {}
-
-    l =exp.loc[:,["index","cs ID"]].apply(lambda var: get_ind(var,"index",dic_cp,unique_cp,"cs ID"),axis =1)
-    list_ind = [dic_cp[k] for k in dic_cp]
-    exp = df.iloc[list_ind]
-    fd_comp = pd.concat([fd_comp,exp])
-
-
-
-fd_comp = fd_comp.loc[:,["std ID",'cpt_grade_ID',"cs ID","cg ID","lieu_ID","time_id","Moyenne"]]
-
 maj(tot = tot)
 
 #Modifying the column's names
-
-df_student.columns = ['std_ID', 'N° Etudiant', 'Nom', 'Prénom', 'time_id']
-df_student.reset_index(inplace = True)
-df_student.drop("index",inplace = True,axis=1)
-
-ft_UV.columns =['uv_ID', 'uv_grade_ID' ,'lieu_ID', 'std_ID','time_id','cs_id']
-ft_UV.reset_index(inplace = True)
-ft_UV.drop("index",inplace = True,axis=1)
-
-df_UV.columns = ['uv_ID', 'nom_UV', 'code_UV', 'lvl_uv']
-df_UV.reset_index(inplace = True)
-df_UV.drop("index",inplace = True,axis=1)
-
-df_cs.columns = ['cs_ID', 'respo_CS', 'nom_CS', 'code_CS', 'lvl_cs']
-df_cs.reset_index(inplace = True)
-df_cs.drop("index",inplace = True,axis=1)
-
-df_cg.columns = ['cg_id', 'code_CG', 'nom_CG', 'lvl_cg']
-df_cg.reset_index(inplace = True)
-df_cg.drop("index",inplace = True,axis=1)
-
-fd_comp.columns = ['std_ID','cpt_grade_ID','cs_ID', 'cg_ID','lieu_ID',"time_id" ,'moyenne']
-fd_comp.reset_index(inplace = True)
-fd_comp.drop("index",inplace = True,axis=1)
 
 maj(tot = tot)
 
@@ -350,35 +361,57 @@ print("CREATING FILES")
 tot = 9
 maj(reset = True, tot = tot)
 
+"""
+df_tps
+df_student
+df_UV
+df_cs
+df_cg
+lieu_d
 
-df_student.to_csv("../results/table/table_dim_etudiant.csv",encoding = 'utf-8-sig', index = False)
+ft_notes
+ft_csuv
+ft_cscg
+"""
+
+df_student.columns = ['std_ID', 'etudiantID', 'nom', 'prenom', 'annee_promo']
+df_student.to_csv("../results/table/dim_etudiant.csv",encoding = 'utf-8-sig', index = False)
 maj(tot = tot)
 
-ft_UV.to_csv("../results/table/table_dee_fait_UV.csv",encoding = 'utf-8-sig')
+
+df_UV.columns = ['uv_ID', 'nom_UV', 'code_UV', 'annee', 'semestre']
+df_UV.to_csv("../results/table/dim_UV.csv",encoding = 'utf-8-sig', index = False)
 maj(tot = tot)
 
-df_UV.to_csv("../results/table/table_dim_UV.csv",encoding = 'utf-8-sig', index = False)
+df_cs.columns = ['cs_ID', 'respo_cs', 'nom_cs', 'code_cs', 'semestre', 'annee', 'jacq']
+df_cs.to_csv("../results/table/dim_CS.csv",encoding = 'utf-8-sig', index = False)
 maj(tot = tot)
 
-df_cs.to_csv("../results/table/table_dim_CS.csv",encoding = 'utf-8-sig', index = False)
+df_cg.columns = ['cg_ID', 'code_cg', 'nom_cg']
+df_cg.to_csv("../results/table/dim_CG.csv",encoding = 'utf-8-sig', index = False)
 maj(tot = tot)
 
-df_cg.to_csv("../results/table/table_dim_CG.csv",encoding = 'utf-8-sig', index = False)
+
+ft_notes.columns = ['cs_ID', 'uv_ID', 'temps_id', 'std_ID', 'lieu_ID', 'jetons_acquis']
+ft_notes.to_csv("../results/table/table_de_fait_notes.csv",encoding = 'utf-8-sig', index = False)
 maj(tot = tot)
 
-fd_comp.to_csv("../results/table/table_de_fait_competence.csv",encoding = 'utf-8-sig')
+ft_csuv.columns = ['cs_ID', 'uv_ID', 'niveau_CS', 'nb_jetons']
+ft_csuv.to_csv("../results/table/table_de_fait_csuv.csv",encoding = 'utf-8-sig', index = False)
 maj(tot = tot)
 
-uv_grade.to_csv("../results/table/table_dim_grade_UV.csv",encoding = 'utf-8-sig', index = False)
+ft_cscg.columns = ['cs_ID','cg_ID']
+ft_cscg.to_csv("../results/table/table_de_fait_cscg.csv",encoding = 'utf-8-sig', index = False)
 maj(tot = tot)
 
-cpt_grade.to_csv("../results/table/table_dim_grade_cpt.csv",encoding = 'utf-8-sig', index = False)
+lieu_d.columns = ['lieu_ID', 'campus']
+lieu_d.to_csv("../results/table/dim_lieu.csv",encoding = 'utf-8-sig', index = False)
 maj(tot = tot)
 
-lieu_d.to_csv("../results/table/table_dim_lieu.csv",encoding = 'utf-8-sig', index = False)
-maj(tot = tot)
 
-df_tps.to_csv("../results/table/table_dim_temps.csv",encoding = 'utf-8-sig', index = False)
+df_tps.columns = ["temps_ID", "annee","semestre"]
+df_tps.to_csv("../results/table/dim_temps.csv",encoding = 'utf-8-sig', index = False)
+maj(tot = tot)
 
 print("TABLES SAVED")
 
