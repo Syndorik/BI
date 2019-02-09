@@ -5,32 +5,46 @@
 3,activités sportives,Code UV2,2015,S2
 4,Capacité à communiquer en anglais,Code UV0,2015,S1
 5,Capacité à communiquer en LV2,Code UV1,2015,S1
-6,Soutenance Stage Op,Code UV0,2015,S2
-7,Anglais,Code UV1,2015,S2
-8,LV2,Code UV2,2015,S2
-9,Info,Code UV0,2015,S1
-10,Physique,Code UV1,2015,S1
-11,calcul scientifique,Code UV2,2015,S1
-12,Physique-Chimie,1A-S2-PHY,2015,S2
-13,AEP,1A-S2-AEP,2015,S2
-14,Méthodes et outils mathématiques,1A-S2-MATH,2015,S2
-15,info,Code UV0,2015,S1
-16,Niveau-Situation0,Code UV0,2016,S1
-17,Niveau-Situation1,Code UV1,2016,S2
-18,capacité à communiquer en anglais,Code UV0,2016,S1
-19,capacité à communiquer en LV2,Code UV1,2016,S1
-20,Soutenance Stage op,Code UV0,2016,S2
-21,Capacitè à communiquer en anglais,Code UV1,2016,S2
-22,Capacitè à communiquer en LV2,Code UV2,2016,S2
-23,Calcul Scientifique,A1-S1-CSC,2016,S1
-24,Complements sciences pour l'ingénieur,1A-S1-UV2,2016,S1
-25,Conception et Programmation Objets,Code UV0,2016,S2
-26,Modélisation Physique-Chimie,1A-S2-PHY,2016,S2
-27,Bases de l'Auto et de l'optim,Code UV3,2016,S2
-28,Complement sciences pour l'ingénieur,1A-S1-UV2,2016,S1
-29,Soutenance Stage Opérateur,stage,2017,S2
-30,Capacité a comuniquer en LV2,Code UV2,2017,S2
-31,Informatique,Code UV0,2017,S1
-32,Calcul scientifique,1A-S1-UV7,2017,S1
-33,Auto & Optim,Code UV0,2017,S2
-34,Physique-Chimie et Simulation,Code UV2,2017,S2
+6,SSG,Code UV2,2015,S1
+7,Soutenance Stage Op,Code UV0,2015,S2
+8,Anglais,Code UV1,2015,S2
+9,LV2,Code UV2,2015,S2
+10,activités sportives,Code UV0,2015,S2
+11,SSG,Code UV0,2015,S2
+12,Info,Code UV0,2015,S1
+13,Physique,Code UV1,2015,S1
+14,calcul scientifique,Code UV2,2015,S1
+15,SSG,Code UV3,2015,S1
+16,Info,1A-S2-INF,2015,S2
+17,Physique-Chimie,1A-S2-PHY,2015,S2
+18,AEP,1A-S2-AEP,2015,S2
+19,Méthodes et outils mathématiques,1A-S2-MATH,2015,S2
+20,info,Code UV0,2015,S1
+21,PRIME,1A-S2-PRIME,2015,S2
+22,Niveau-Situation0,Code UV0,2016,S1
+23,SSG,Code UV0,2016,S2
+24,Niveau-Situation1,Code UV1,2016,S2
+25,capacité à communiquer en anglais,Code UV0,2016,S1
+26,capacité à communiquer en LV2,Code UV1,2016,S1
+27,Soutenance Stage op,Code UV0,2016,S2
+28,Capacitè à communiquer en anglais,Code UV1,2016,S2
+29,Capacitè à communiquer en LV2,Code UV2,2016,S2
+30,Niveau-Situation0,Code UV0,2016,S2
+31,Info,A1-S1-INF,2016,S1
+32,Calcul Scientifique,A1-S1-CSC,2016,S1
+33,Complements sciences pour l'ingénieur,1A-S1-UV2,2016,S1
+34,Conception et Programmation Objets,Code UV0,2016,S2
+35,Modélisation Physique-Chimie,1A-S2-PHY,2016,S2
+36,SSG,Code UV2,2016,S2
+37,Bases de l'Auto et de l'optim,Code UV3,2016,S2
+38,Complement sciences pour l'ingénieur,1A-S1-UV2,2016,S1
+39,Bases de l'Auto et de l'optim,Code UV2,2016,S2
+40,Soutenance Stage Opérateur,stage,2017,S2
+41,Capacité à communiquer en anglais,Code UV1,2017,S2
+42,Capacité a comuniquer en LV2,Code UV2,2017,S2
+43,Informatique,Code UV0,2017,S1
+44,Calcul scientifique,1A-S1-UV7,2017,S1
+45,Auto & Optim,Code UV0,2017,S2
+46,Conception et Programmation Objets,Code UV1,2017,S2
+47,Physique-Chimie et Simulation,Code UV2,2017,S2
+48,Physique-Chimie et Simulation,Code UV0,2017,S2
