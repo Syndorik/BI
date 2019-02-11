@@ -235,7 +235,8 @@ df["cs ID"] = df.apply(lambda var : df_cs[(df_cs["idcss"] == var["idcss"]) & (df
 
 df_cs.drop("idcss",inplace= True,axis=1)
 mandatory = ['STA','STB','STC','IGA','IGB']
-df_cs["jacq"] = df_cs.apply(lambda line : jacq_dic[line["annee"]][line["semestre"]][line["codeCS"]] if line["codeCS"] in mandatory else 4 ,axis = 1)
+df_cs["jacq"] = df_cs.apply(lambda line : jacq_dic[line["annee"]][line["semestre"]][line["codeCS"]] if line["codeCS"] in mandatory else  0,axis = 1)
+df_cs["jacq"]= df_cs.apply(lambda line : 4 if((line["jacq"] == 0) and (line["semestre"] == "S2")) else int(line["jacq"]),axis = 1)
 maj(tot = tot)
 
 #Dim CG

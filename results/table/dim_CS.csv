@@ -1,13 +1,13 @@
 ﻿cs_ID,respo_cs,nom_cs,code_cs,semestre,annee,jacq
 0,GOSSIAUX Pol Bernard,IGA : Pratique de l'ingénierie,IGA,S2,2015,4
 1,GOSSIAUX Pol Bernard,IGB : Projet d'ingénierie,IGB,S2,2015,4
-2,RAUCH Carl ; LEMOULT Bernard ; ROUSSEAU Patricia ; MONY Loïc,interpA : Agir en équipe,interpA,S1,2015,4
+2,RAUCH Carl ; LEMOULT Bernard ; ROUSSEAU Patricia ; MONY Loïc,interpA : Agir en équipe,interpA,S1,2015,0
 3,LEMOULT Bernard ; GOSSIAUX Pol Bernard ; DEVIGNE Michel ; MONY Loïc,interpA : Agir en équipe,interpA,S2,2015,4
-4,EVANS Stephanie ; HADDADI Farida ; DEVIGNE Michel ; ROUSSEAU Patricia,interpB : Capacité de communication,interpB,S1,2015,4
+4,EVANS Stephanie ; HADDADI Farida ; DEVIGNE Michel ; ROUSSEAU Patricia,interpB : Capacité de communication,interpB,S1,2015,0
 5,HADDADI Farida ; ROUSSEAU Patricia,interpB : Capacité de communication,interpB,S2,2015,4
-6,MONY Loïc,intraA : La personne face à elle-même,intraA,S1,2015,4
+6,MONY Loïc,intraA : La personne face à elle-même,intraA,S1,2015,0
 7,MONY Loïc,intraA : La personne face à elle-même,intraA,S2,2015,4
-8,MONY Loïc,intraB : La personne face aux autres,intraB,S1,2015,4
+8,MONY Loïc,intraB : La personne face aux autres,intraB,S1,2015,0
 9,MONY Loïc,intraB : La personne face aux autres,intraB,S2,2015,4
 10,DEVIGNE Michel,intraC : La personne dans son environnement,intraC,S2,2015,4
 11,LEMOULT Bernard ; TABIOU Safouana ; DEBRUYNE Romuald ; SUBRENAT Albert ; THERS Dominique ; GOSSIAUX Pol Bernard ; DEVIGNE Michel ; ROUSSEAU Patricia,STA : Connaissance et savoir,STA,S1,2015,12
@@ -16,13 +16,13 @@
 14,BATIGNE Guillaume,STB : Mise en oeuvre des connaissances et savoir,STB,S2,2015,4
 15,RAUCH Carl ; DEBRUYNE Romuald ; GOSSIAUX Pol Bernard,STC : Recherche et expérimentation,STC,S1,2015,4
 16,DOUENCE Remi ; GOSSIAUX Pol Bernard ; YAGOUBI Mohamed ; BATIGNE Guillaume,STC : Recherche et expérimentation,STC,S2,2015,12
-17,RAUCH Carl ; LEMOULT Bernard ; ROUSSEAU Patricia ; MONY Loïc,interpA : Agir en équipe,interpA,S1,2016,4
+17,RAUCH Carl ; LEMOULT Bernard ; ROUSSEAU Patricia ; MONY Loïc,interpA : Agir en équipe,interpA,S1,2016,0
 18,LEMOULT Bernard ; GOSSIAUX Pol Bernard ; DEVIGNE Michel ; MONY Loïc,interpA : Agir en équipe,interpA,S2,2016,4
-19,EVANS Stephanie ; HADDADI Farida ; DEVIGNE Michel ; ROUSSEAU Patricia,interpB : Capacité de communication,interpB,S1,2016,4
+19,EVANS Stephanie ; HADDADI Farida ; DEVIGNE Michel ; ROUSSEAU Patricia,interpB : Capacité de communication,interpB,S1,2016,0
 20,HADDADI Farida ; ROUSSEAU Patricia ; MACKENZIE Colin,interpB : Capacité de communication,interpB,S2,2016,4
-21,MONY Loïc,intraA : La personne face à elle-même,intraA,S1,2016,4
+21,MONY Loïc,intraA : La personne face à elle-même,intraA,S1,2016,0
 22,MONY Loïc,intraA : La personne face à elle-même,intraA,S2,2016,4
-23,MONY Loïc,intraB : La personne face aux autres,intraB,S1,2016,4
+23,MONY Loïc,intraB : La personne face aux autres,intraB,S1,2016,0
 24,MONY Loïc,intraB : La personne face aux autres,intraB,S2,2016,4
 25,DEVIGNE Michel ; DOUENCE Remi ; GOSSIAUX Pol Bernard ; LEMOULT Bernard ; ROUSSEAU Patricia ; SUBRENAT Albert ; TABIOU Safouana ; THERS Dominique ; CHABERT Gilles,STA : Connaissance et savoir,STA,S1,2016,12
 26,BATIGNE Guillaume ; DEVIGNE Michel ; LEMOULT Bernard ; ROUSSEAU Patricia ; TABIOU Safouana ; YAGOUBI Mohamed ; DEBRUYNE Romuald,STA : Connaissance et savoir,STA,S2,2016,12
