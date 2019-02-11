@@ -298,6 +298,7 @@ def niv_cs(line):
 
 ft_csuv["niveau_CS"] = ft_csuv.apply(lambda line : niv_cs(line),axis = 1)
 ft_csuv["nb_jetons"] = 4
+ft_csuv.drop_duplicates(inplace=True)
 
 
 maj(tot = tot)
