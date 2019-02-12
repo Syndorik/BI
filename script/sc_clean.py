@@ -313,11 +313,113 @@ ft_cscg = ft_cscg.drop_duplicates()
 
 maj(tot = tot)
 
-#Fact Table Comp
+#Dim dégénéré CS code
+df_csdegen = df.loc[:,["codeCS"]].drop_duplicates()
+df_csdegen = df_csdegen.reset_index().drop("index",axis=1).reset_index()
+df_csdegen.columns = ["code_cs_ID","code_CS"]
+
+#Fact Table TDF_csnote
+def niveau_atteint(line):
+    nbj2a = int(line["nbre_jetons_niveau2_acquis"])
+    nbj1a = int(line["nbre_jetons_niveau1_acquis"])
+    tmpjac2 = int(line["tmp_jac2"])
+    tmpjac1 = int(line["tmp_jac1"])
+    if(nbj2a == tmpjac2):
+        return 2
+    elif(nbj1a == tmpjac1):
+        return 1
+    elif(nbj1a + nbj2a >= tmpjac1):
+        return 1
+    else:
+        return 0
+
+def splitjacq_nv2(line):
+    l = line["tmp"].split("-")
+    if(len(l) == 2):
+        l = l[1]
+    else :
+        return 0
+    splitt = l.split("_")
+    return splitt[2]
+
+def splitjacq_nv1(line):
+    l = line["tmp"].split("-")[0]
+    splitt = l.split("_")
+    return splitt[2]
+
+def split_nv1(line):
+    l = line["tmp"].split("-")[0]
+    splitt = l.split("_")
+    ll = splitt[0]
+    if(int(ll) > int(splitt[2])):
+        ll = splitt[2]
+    return ll
+
+def split_nv2(line):
+    l = line["tmp"].split("-")
+    if(len(l) == 2):
+        l = l[1]
+    else :
+        return 0
+    splitt = l.split("_")
+    ll = splitt[0]
+    if(int(ll) > int(splitt[2])):
+        ll = splitt[2]
+    return ll
+
+def ret_niv_jetons(line):
+    cc = ft_notes[(ft_notes["std ID"] == line["std ID"]) & (ft_notes["cs ID"].isin(df_cs[df_cs["codeCS"] == line["codeCS"]].index))].groupby("cs ID").sum()
+    cc = cc.reset_index()
+    cc["jacq"] = cc.apply(lambda line : list(df_cs[df_cs["cs ID"] == line["cs ID"]]["jacq"])[0],axis = 1)
+    cc["jetons_acquis"] = cc.apply(lambda line : str(line["jetons_acquis"]) +"_"+str(ret_nv(line))+"_"+str(line["jacq"]),axis = 1)
+    return "-".join(list(cc["jetons_acquis"]))
+
+def ret_nv(line):
+    s = list(df_cs[df_cs["cs ID"] == line["cs ID"]]["semestre"])[0]
+    if(s == "S1"):
+        return 1
+    else:
+        return 2
+
+def retnbjeton(line):
+    jsum = sum(ft_notes[(ft_notes["std ID"] == line["std ID"]) & (ft_notes["cs ID"] == line["cs ID"]) ]["jetons_acquis"])
+    jaac = list(df_cs[df_cs["cs ID"] == line["cs ID"]]["jacq"])[0]
+    if jsum > jaac :
+        return jaac
+    else:
+        return jsum
+
+def niv_atteint(line):
+    if line["nb_jeton"] == line["jetonmax"]:
+        return line["niv"]
+    else:
+        return 0
+
+ft_csnote = df.loc[:,["std ID","codeCS"]]
+ft_csnote.drop_duplicates(inplace= True)
+ft_csnote["tmp"] = ft_csnote.apply(lambda line : ret_niv_jetons(line),axis=1)
+ft_csnote["nbre_jetons_niveau1_acquis"] = ft_csnote.apply(lambda line : split_nv1(line),axis = 1)
+ft_csnote["nbre_jetons_niveau2_acquis"] = ft_csnote.apply(lambda line : split_nv2(line),axis = 1)
+ft_csnote["tmp_jac1"] = ft_csnote.apply(lambda line : splitjacq_nv1(line),axis = 1)
+ft_csnote["tmp_jac2"] = ft_csnote.apply(lambda line : splitjacq_nv2(line),axis = 1)
+ft_csnote["niveau_atteint_Cs"] = ft_csnote.apply(lambda line : niveau_atteint(line),axis = 1)
+ft_csnote.drop(["tmp","tmp_jac1","tmp_jac2"],axis = 1,inplace=True)
+ft_csnote["codeCS"] = ft_csnote["codeCS"].apply(lambda col : list(df_csdegen[df_csdegen["code_CS"] == col]["code_cs_ID"])[0])
+ft_csnote.columns = ['std_ID', 'code_cs_ID', 'nbre_jetons_niveau1_acquis',
+       'nbre_jetons_niveau2_acquis', 'niveau_atteint_Cs']
+
 
 maj(tot = tot)
 
-#Modifying the column's names
+#Fact table cgnote
+def niv_median(line):
+    indices = list(df_csdegen[df_csdegen["code_CS"].isin(df_cs.loc[list(ft_cscg[ft_cscg["cg ID"] == line["cg ID"]]["cs ID"])]["codeCS"].unique())]["code_cs_ID"])
+    mediann = round(ft_csnote[(ft_csnote["std_ID"] == line["std ID"]) & (ft_csnote["code_cs_ID"].isin(indices))]["niveau_atteint_Cs"].median())
+    return int(mediann)
+
+ft_cgnote = df.loc[:,["std ID","cg ID"]].drop_duplicates()
+ft_cgnote["niveau_atteint_cg"] = ft_cgnote.apply(lambda line : niv_median(line),axis = 1) 
+ft_cgnote.columns = ['std_ID', 'cg_ID', 'niveau_atteint_Cg']
 
 maj(tot = tot)
 
@@ -337,11 +439,20 @@ lieu_d
 ft_notes
 ft_csuv
 ft_cscg
+
+df_csdegen
+ft_csnote
+ft_cgnote
 """
 
 df_student.columns = ['std_ID', 'etudiantID', 'nom', 'prenom', 'annee_promo']
 df_student.to_csv("../results/table/dim_etudiant.csv",encoding = 'utf-8-sig', index = False)
 maj(tot = tot)
+
+
+df_csdegen.to_csv("../results/table/dim_cscode_degenere.csv",encoding = 'utf-8-sig', index = False)
+ft_csnote.to_csv("../results/table/table_de_fait_RstCs.csv",encoding = 'utf-8-sig', index = False)
+ft_cgnote.to_csv("../results/table/table_de_fait_RstCg.csv",encoding = 'utf-8-sig', index = False)
 
 
 df_UV.columns = ['uv_ID', 'nom_UV', 'code_UV', 'annee', 'semestre']
