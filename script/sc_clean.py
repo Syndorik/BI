@@ -319,54 +319,6 @@ df_csdegen = df_csdegen.reset_index().drop("index",axis=1).reset_index()
 df_csdegen.columns = ["code_cs_ID","code_CS"]
 
 #Fact Table TDF_csnote
-def niveau_atteint(line):
-    nbj2a = int(line["nbre_jetons_niveau2_acquis"])
-    nbj1a = int(line["nbre_jetons_niveau1_acquis"])
-    tmpjac2 = int(line["tmp_jac2"])
-    tmpjac1 = int(line["tmp_jac1"])
-    if((nbj2a == tmpjac2) and (tmpjac2 != 0)):
-        return 2
-    elif((nbj1a == tmpjac1) and (tmpjac1 !=0)):
-        return 1
-    elif(nbj1a + nbj2a >= tmpjac1):
-        return 1
-    else:
-        return 0
-
-def splitjacq_nv2(line):
-    l = line["tmp"].split("-")
-    if(len(l) == 2):
-        l = l[1]
-    else :
-        return 0
-    splitt = l.split("_")
-    return splitt[2]
-
-def splitjacq_nv1(line):
-    l = line["tmp"].split("-")[0]
-    splitt = l.split("_")
-    return splitt[2]
-
-def split_nv1(line):
-    l = line["tmp"].split("-")[0]
-    splitt = l.split("_")
-    ll = splitt[0]
-    if(int(ll) > int(splitt[2])):
-        ll = splitt[2]
-    return ll
-
-def split_nv2(line):
-    l = line["tmp"].split("-")
-    if(len(l) == 2):
-        l = l[1]
-    else :
-        return 0
-    splitt = l.split("_")
-    ll = splitt[0]
-    if(int(ll) > int(splitt[2])):
-        ll = splitt[2]
-    return ll
-
 def ret_niv_jetons(line):
     cc = ft_notes[(ft_notes["std ID"] == line["std ID"]) & (ft_notes["cs ID"].isin(df_cs[df_cs["codeCS"] == line["codeCS"]].index))].groupby("cs ID").sum()
     cc = cc.reset_index()
@@ -394,6 +346,79 @@ def niv_atteint(line):
         return line["niv"]
     else:
         return 0
+
+def niveau_atteint(line):
+    nbj2a = int(line["nbre_jetons_niveau2_acquis"])
+    nbj1a = int(line["nbre_jetons_niveau1_acquis"])
+    tmpjac2 = int(line["tmp_jac2"])
+    tmpjac1 = int(line["tmp_jac1"])
+    if((nbj2a == tmpjac2) and (tmpjac2 != 0)):
+        return 2
+    elif((nbj1a == tmpjac1) and (tmpjac1 !=0)):
+        return 1
+    elif(nbj1a + nbj2a >= tmpjac1):
+        return 1
+    else:
+        return 0
+
+def split_nv2(line):
+    l = line["tmp"].split("-")
+    if(len(l) == 2):
+        l = l[1]
+        
+    else :
+        l = l[0]
+        splitt = l.split("_")
+        niv = splitt[1]
+        if (int(niv) != 2):
+            return 0
+        
+        ll = splitt[0]
+        if(int(ll) > int(splitt[2])):
+            ll = splitt[2]
+        return ll
+
+    splitt = l.split("_")
+    ll = splitt[0]
+    if(int(ll) > int(splitt[2])):
+        ll = splitt[2]
+    return ll
+
+def split_nv1(line):
+    l = line["tmp"].split("-")[0]
+    
+    splitt = l.split("_")
+    niveau = int(splitt[1])
+    if(niveau == 2):
+        return 0
+    
+    ll = splitt[0]
+    if(int(ll) > int(splitt[2])):
+        ll = splitt[2]
+    return ll
+
+def splitjacq_nv1(line):
+    l = line["tmp"].split("-")[0]
+    splitt = l.split("_")
+    niveau = int(splitt[1])
+    if(niveau == 2):
+        return 0
+    return splitt[2]
+
+def splitjacq_nv2(line):
+    l = line["tmp"].split("-")
+    if(len(l) == 2):
+        l = l[1]
+    else :
+        l = l[0]
+        splitt = l.split("_")
+        niv = splitt[1]
+        if (int(niv) != 2):
+            return 0
+        return splitt[2]
+
+    splitt = l.split("_")
+    return splitt[2]
 
 ft_csnote = df.loc[:,["std ID","codeCS"]]
 ft_csnote.drop_duplicates(inplace= True)
