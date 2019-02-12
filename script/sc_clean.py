@@ -324,9 +324,9 @@ def niveau_atteint(line):
     nbj1a = int(line["nbre_jetons_niveau1_acquis"])
     tmpjac2 = int(line["tmp_jac2"])
     tmpjac1 = int(line["tmp_jac1"])
-    if(nbj2a == tmpjac2):
+    if((nbj2a == tmpjac2) and (tmpjac2 != 0)):
         return 2
-    elif(nbj1a == tmpjac1):
+    elif((nbj1a == tmpjac1) and (tmpjac1 !=0)):
         return 1
     elif(nbj1a + nbj2a >= tmpjac1):
         return 1
