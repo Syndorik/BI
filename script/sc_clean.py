@@ -765,7 +765,7 @@ ft_nivCgnonAtteint.columns = ['std_ID', 'niveau_ID', 'nb_Nv_NA']
 ft_nivCgnonAtteint.to_csv("../results/table/table_de_fait_NvCgNA.csv",encoding = 'utf-8-sig', index = False)
 
 df_nv_degenere.columns = ['niveau_ID', 'niveau']
-df_nv_degenere.to_csv("../results/table/table_de_fait_NvCgNA.csv",encoding = 'utf-8-sig', index = False)
+df_nv_degenere.to_csv("../results/table/dim_degenere_niveau.csv",encoding = 'utf-8-sig', index = False)
 
 ft_notes.columns = ['cs_ID', 'uv_ID', 'temps_id', 'std_ID', 'lieu_ID', 'jetons_acquis']
 ft_notes.to_csv("../results/table/table_de_fait_notes.csv",encoding = 'utf-8-sig', index = False)
