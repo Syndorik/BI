@@ -655,6 +655,8 @@ ft_nivCsnonAtteint["nombre_cs_a_ce_niveau"] = 1
 grpby = ft_nivCsnonAtteint.groupby(["std_ID","niveau","percentage"]).count()
 ft_nivCsnonAtteint = grpby.reset_index()
 
+ft_nivCsnonAtteint["percentage"] = ft_nivCsnonAtteint.apply(lambda line : 0 if(line["niveau"] == 2) else line["percentage"],axis = 1) 
+
 
 maj(tot = tot)
 
