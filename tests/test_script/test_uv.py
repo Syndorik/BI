@@ -2,7 +2,7 @@ from random import shuffle
 import sys
 import os
 
-sys.path.insert(0,"../lib")
+sys.path.insert(0,"../../lib")
 
 import argparse
 import pandas as pd
@@ -20,7 +20,7 @@ ERROR = Fore.RED+"ERROR"+color.END
 valtest = 0
 
 print(Style.BRIGHT+"------------------------ STARTING TEST ------------------------"+color.END)
-print("Tests : Dim_lieu")
+print("Tests : table_de_fait_notes")
 
 parser = argparse.ArgumentParser(description='Cleaning files')
 parser.add_argument('dir', metavar='d', nargs=1,
@@ -60,8 +60,8 @@ sols = [
     "Informatique--2017--S1--Code UV0"
 ]
 
-tmp = df_uv[(df_uv["nom_UV"] == "PRIME") | (df_uv["nom_UV"] == "SSG") | (df_uv["nom_UV"] =="Info") | (df_uv["nom_UV"] =="info") | (df_uv["nom_UV"] =="Informatique")]\
-        .apply(lambda line: line["nom_UV"]+"--"+str(line["annee"])+"--"+line["semestre"]+"--"+line["code_UV"],axis=1)
+tmp = df_uv[(df_uv["nom_uv"] == "PRIME") | (df_uv["nom_uv"] == "SSG") | (df_uv["nom_uv"] =="Info") | (df_uv["nom_uv"] =="info") | (df_uv["nom_uv"] =="Informatique")]\
+        .apply(lambda line: line["nom_uv"]+"--"+str(line["annee"])+"--"+line["semestre"]+"--"+line["code_uv"],axis=1)
 
 for k in tmp:
     if k in sols:
@@ -78,3 +78,8 @@ print("UV information test : {}".format(valtest))
 
 print(Style.BRIGHT+'Test passed : {}/2'.format(cpt)+color.END)
 print(Style.BRIGHT+"------------------------ END OF TEST ------------------------"+color.END)
+
+if(cpt == 2):
+    sys.exit(1)
+else:
+    sys.exit(0)

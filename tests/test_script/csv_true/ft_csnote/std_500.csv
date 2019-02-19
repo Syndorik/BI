@@ -1,0 +1,11 @@
+﻿std_ID,code_cs_ID,nbre_jetons_niveau1_acquis,nbre_jetons_niveau2_acquis,niveau_atteint_Cs,ratio_jeton_niv_de_0_à_1,ratio_jeton_niv_de_1_à_2,niv_max_possible
+500,7,8,8,2,100,100,2
+500,8,4,4,1,100,50,2
+500,9,4,4,2,100,100,2
+500,0,0,0,0,0,0,0
+500,1,0,0,0,0,0,0
+500,2,0,0,0,0,0,0
+500,3,0,0,0,0,0,0
+500,4,0,0,0,0,0,0
+500,5,0,0,0,0,0,0
+500,6,0,0,0,0,0,0

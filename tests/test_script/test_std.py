@@ -2,7 +2,7 @@ from random import shuffle
 import sys
 import os
 
-sys.path.insert(0,"../lib")
+sys.path.insert(0,"../../lib")
 
 import argparse
 import pandas as pd
@@ -91,7 +91,7 @@ dic_true_sol = {
 }
 id_tests = [0,50,100,200,250,300,400,450,500]
 for k in id_tests: 
-    tmp = df_student[df_student["std_ID"] == k]["annee_promo"]
+    tmp = df_student[df_student["std_ID"] == k]["annee_actuelle"]
     ind = tmp.index[0]
     annee = tmp[ind]
     if(dic_true_sol[k] == annee):
@@ -102,6 +102,11 @@ for k in id_tests:
 if(valtest != ERROR):
     cpt+=1
 
-print("annee_promo est exact : {}\n ".format(valtest))
+print("annee_actuelle est exact : {}\n ".format(valtest))
 print(Style.BRIGHT+'Test passed : {}/6'.format(cpt)+color.END)
 print(Style.BRIGHT+"------------------------ END OF TEST ------------------------"+color.END)
+
+if(cpt == 6):
+    sys.exit(1)
+else:
+    sys.exit(0)

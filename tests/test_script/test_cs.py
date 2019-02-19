@@ -2,7 +2,7 @@ from random import shuffle
 import sys
 import os
 
-sys.path.insert(0,"../lib")
+sys.path.insert(0,"../../lib")
 
 import argparse
 import pandas as pd
@@ -157,3 +157,8 @@ print("jacq for intrA : {}".format(valtest))
 
 print(Style.BRIGHT+'Test passed : {}/5'.format(cpt)+color.END)
 print(Style.BRIGHT+"------------------------ END OF TEST ------------------------"+color.END)
+
+if(cpt == 5):
+    sys.exit(1)
+else:
+    sys.exit(0)

@@ -2,7 +2,7 @@ from random import shuffle
 import sys
 import os
 
-sys.path.insert(0,"../lib")
+sys.path.insert(0,"../../lib")
 
 import argparse
 import pandas as pd
@@ -104,3 +104,8 @@ print("Code cg associé au bon nom : {}".format(valtest))
 
 print(Style.BRIGHT+'Test passed : {}/4'.format(cpt)+color.END)
 print(Style.BRIGHT+"------------------------ END OF TEST ------------------------"+color.END)
+
+if(cpt == 4):
+    sys.exit(1)
+else:
+    sys.exit(0)

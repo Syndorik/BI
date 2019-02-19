@@ -2,7 +2,7 @@ from random import shuffle
 import sys
 import os
 
-sys.path.insert(0,"../lib")
+sys.path.insert(0,"../../lib")
 
 import argparse
 import pandas as pd
@@ -20,7 +20,7 @@ ERROR = Fore.RED+"ERROR"+color.END
 valtest = 0
 
 print(Style.BRIGHT+"------------------------ STARTING TEST ------------------------"+color.END)
-print("Tests : Dim_time")
+print("Tests : Dim_lieu")
 
 parser = argparse.ArgumentParser(description='Cleaning files')
 parser.add_argument('dir', metavar='d', nargs=1,
@@ -30,11 +30,11 @@ myparser = parser.parse_args()
 PATH = myparser.dir[0]
 
 print("File Loaded\n-----")
-df_time = pd.read_csv(PATH)
+df_lieu = pd.read_csv(PATH)
 cpt = 0
 
 ##Testing ID
-if len(df_time["temps_ID"].unique()) ==( max(df_time["temps_ID"])+1):
+if len(df_lieu["lieu_ID"].unique()) ==( max(df_lieu["lieu_ID"])+1):
     valtest = OK
     cpt+=1
 else :
@@ -43,11 +43,11 @@ else :
 print("ID test : {}".format(valtest))
 
 #Testing if every semester is in there
-semester = ["2015-S1","2015-S2","2016-S1","2016-S2","2017-S1","2017-S2"]
-tmp_ser =df_time.apply(lambda line : str(line["annee"])+"-"+line["semestre"],axis = 1)
+lieu = ["Nantes"]
+tmp_ser =df_lieu["campus"]
 
 for k in tmp_ser:
-    if k in semester:
+    if k in lieu:
         valtest = OK
     else:
         valtest = ERROR
@@ -56,7 +56,12 @@ for k in tmp_ser:
 if(valtest == OK):
     cpt+=1
 
-print("Each period of the three years is present : {}".format(valtest))
+print("Each campus is present : {}".format(valtest))
 
 print(Style.BRIGHT+'Test passed : {}/2'.format(cpt)+color.END)
 print(Style.BRIGHT+"------------------------ END OF TEST ------------------------"+color.END)
+
+if(cpt == 2):
+    sys.exit(1)
+else:
+    sys.exit(0)
